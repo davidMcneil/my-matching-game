@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import {Button} from 'react-native-elements';
 /* Local Imports. */
 import {setFilter} from '../actions';
-import {FilterSettings} from '../store';
+import {FilterSettings} from '../types';
 
 /********************************/
 // Local Declarations.

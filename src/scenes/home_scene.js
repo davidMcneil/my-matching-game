@@ -28,4 +28,4 @@ export const HomeScene = (props: {toTodos: Function}) => (
     buttonStyle={styles.buttonStyle}
     textStyle={styles.textStyle}
     onPress={props.toTodos}/>
-);      
+);

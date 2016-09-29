@@ -11,6 +11,7 @@ const SceneIds = Object.freeze({
 });
 
 const home_route = {id: SceneIds.home};
+
 const todos_route = {id: SceneIds.todos};
 
 /********************************/
@@ -18,8 +19,10 @@ const todos_route = {id: SceneIds.todos};
 /********************************/
 export {SceneIds};
 
-export const toHomeFromTodos = (navigator) => navigator.pop();
+export const toHomeFromTodos = (navigator: Object) => navigator.pop();
 
-export const toTodosFromHome = (navigator) => navigator.push(todos_route);
+export const toTodosFromHome = (navigator: Object) => (
+  navigator.push(todos_route)
+);
 
 export const INITIAL_ROUTE_STACK = [home_route];

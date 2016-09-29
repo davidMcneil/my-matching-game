@@ -44,4 +44,4 @@ export const TodosScene = (props: {toHome: Function}) => (
     </View>
     <VisibleTodos/>
   </ScrollView>
-);      
+);

@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start"
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "stats" : "sloc src"
   },
   "dependencies": {
     "immutable": "^3.8.1",
@@ -12,7 +13,9 @@
     "react-native-elements": "^0.6.0",
     "react-native-vector-icons": "^2.1.0",
     "react-redux": "^4.4.5",
-    "redux": "^3.6.0"
+    "redux": "^3.6.0",
+    "redux-persist": "^4.0.0-alpha5",
+    "redux-persist-transform-immutable": "^3.2.0"
   },
   "devDependencies": {
     "babel-eslint": "^6.1.2",
@@ -20,6 +23,7 @@
     "eslint-plugin-flowtype": "^2.19.0",
     "eslint-plugin-react": "^6.3.0",
     "eslint-plugin-react-native": "^2.0.0",
-    "eslinter": "^3.2.1"
+    "eslinter": "^3.2.1",
+    "sloc": "^0.1.11"
   }
 }

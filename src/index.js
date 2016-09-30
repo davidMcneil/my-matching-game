@@ -47,7 +47,7 @@ const configureScene = (route) => {
 /********************************/
 // Exported Declarations.
 /********************************/
-export const TodoApp = () => (
+export const MyMatchingGame = () => (
   <Provider store={STORE}>
     <Navigator ref={(nav) => navigator = nav}
       initialRouteStack={INITIAL_ROUTE_STACK}

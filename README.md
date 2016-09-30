@@ -1,4 +1,4 @@
-# TodoApp
+# My Matching Game
 This is an example app built using react-native. This primarily acts as a template for future app development. Currently, the template only supports Android.
 
 ## Useful Commands

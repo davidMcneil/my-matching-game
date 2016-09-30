@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     padding: 0
   },
   textStyle: {
-    fontSize: 40,
+    fontSize: 28,
     color: 'rgba(0, 125, 0, 1)'
   }
 });
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
 // Exported Declarations.
 /********************************/
 export const HomeScene = (props: {toTodos: Function}) => (
-  <Button title='My TodoApp!'
+  <Button title='My Matching Game!'
     buttonStyle={styles.buttonStyle}
     textStyle={styles.textStyle}
     onPress={props.toTodos}/>

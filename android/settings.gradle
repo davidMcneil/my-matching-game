@@ -1,4 +1,4 @@
-rootProject.name = 'TodoApp'
+rootProject.name = 'MyMatchingGame'
 
 include ':app'
 include ':react-native-vector-icons'

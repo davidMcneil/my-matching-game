@@ -2,7 +2,7 @@
 /* External Imports. */
 import {AppRegistry} from 'react-native';
 /* Local Imports. */
-import {TodoApp} from './src/index';
+import {MyMatchingGame} from './src/index';
 
 /********************************/
 // Local Declarations.
@@ -11,4 +11,4 @@ import {TodoApp} from './src/index';
 /********************************/
 // Exported Declarations.
 /********************************/
-AppRegistry.registerComponent('TodoApp', () => TodoApp);
+AppRegistry.registerComponent('MyMatchingGame', () => MyMatchingGame);

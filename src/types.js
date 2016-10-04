@@ -1,6 +1,6 @@
 /* @flow */
 /* External Imports. */
-import {Record} from 'immutable';
+import {List, Record} from 'immutable';
 /* Local Imports. */
 
 /********************************/
@@ -10,13 +10,16 @@ import {Record} from 'immutable';
 /********************************/
 // Exported Declarations.
 /********************************/
-export const Todo = Record({
-  text: '',
-  completed: false
-}, 'Todo');
+export const Card = Record({
+  image: '',
+  audio: ''
+}, 'Card');
 
-export const FilterSettings = {
-  completed: 'COMPLETED',
-  active: 'ACTIVE',
-  all: 'ALL'
-};
+export const Deck = Record({
+  id: undefined,
+  name: '',
+  avatar: 0,
+  correct: 0,
+  total: 0,
+  cards: List()
+}, 'Deck');

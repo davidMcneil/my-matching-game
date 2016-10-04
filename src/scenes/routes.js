@@ -6,23 +6,23 @@
 // Local Declarations.
 /********************************/
 const SceneIds = Object.freeze({
-  home: 'HOME_SCENE',
-  todos: 'TODOS_SCENE'
+  deck_list: 'DECK_LIST',
+  deck_edit: 'DECK_EDIT'
 });
 
-const home_route = {id: SceneIds.home};
+const deck_list = {id: SceneIds.deck_list};
 
-const todos_route = {id: SceneIds.todos};
+const deck_edit = {id: SceneIds.deck_edit};
 
 /********************************/
 // Exported Declarations.
 /********************************/
 export {SceneIds};
 
-export const toHomeFromTodos = (navigator: Object) => navigator.pop();
+export const toDeckListFromDeckEdit = (navigator: Object) => navigator.pop();
 
-export const toTodosFromHome = (navigator: Object) => (
-  navigator.push(todos_route)
+export const toDeckEditFromDeckList = (navigator: Object) => (
+  navigator.push(deck_edit)
 );
 
-export const INITIAL_ROUTE_STACK = [home_route];
+export const INITIAL_ROUTE_STACK = [deck_list];

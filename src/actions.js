@@ -1,7 +1,7 @@
 /* @flow */
 /* External Imports. */
 /* Local Imports. */
-import {Todo} from './types';
+import {Card} from './types';
 
 /********************************/
 // Local Declarations.
@@ -10,28 +10,64 @@ import {Todo} from './types';
 /********************************/
 // Exported Declarations.
 /********************************/
-export const ADD_TODO = 'ADD_TODO';
-export const REMOVE_TODO = 'REMOVE_TODO';
-export const SET_TODO_COMPLETED = 'SET_TODO_COMPLETED';
-export const SET_FILTER = 'SET_FILTER';
+export const ADD_DECK = 'ADD_DECK';
+export const REMOVE_DECK = 'REMOVE_DECK';
+export const SET_DECK_NAME = 'SET_DECK_NAME';
+export const SET_DECK_AVATAR = 'SET_DECK_AVATAR';
+export const CLEAR_DECK_STATS = 'CLEAR_DECK_STATS';
+export const MAKE_GUESS = 'MAKE_GUESS';
+export const SET_DECK_TO_EDIT = 'SET_DECK_TO_EDIT';
+export const ADD_CARD = 'ADD_CARD';
+export const REMOVE_CARD = 'REMOVE_CARD';
 
-export const addTodo = (text: string) => ({
-  type: ADD_TODO,
-  text
+export const addDeck = (id: number, name: string = '') => ({
+  type: ADD_DECK,
+  id,
+  name
 });
 
-export const removeTodo = (todo: Todo) => ({
-  type: REMOVE_TODO,
-  todo
+export const removeDeck = (id: number) => ({
+  type: REMOVE_DECK,
+  id
 });
 
-export const setTodoCompleted = (todo: Todo, completed: boolean) => ({
-  type: SET_TODO_COMPLETED,
-  todo,
-  completed
+export const setDeckName = (id: number, name: string) => ({
+  type: SET_DECK_NAME,
+  id,
+  name
 });
 
-export const setFilter = (filter: string) => ({
-  type: SET_FILTER,
-  filter
+export const setDeckAvatar = (id: number, avatar: number) => ({
+  type: SET_DECK_AVATAR,
+  id,
+  avatar
+});
+
+export const makeGuess = (id: number, correct: boolean) => ({
+  type: MAKE_GUESS,
+  id,
+  correct
+});
+
+export const setDeckToEdit = (id: number) => ({
+  type: SET_DECK_TO_EDIT,
+  id
+});
+
+export const clearDeckStats = (id: number) => ({
+  type: CLEAR_DECK_STATS,
+  id
+});
+
+export const addCard = (id: number, image: string, audio: string) => ({
+  type: ADD_CARD,
+  id,
+  image,
+  audio
+});
+
+export const removeCard = (id: number, card: Card) => ({
+  type: REMOVE_CARD,
+  id,
+  card
 });

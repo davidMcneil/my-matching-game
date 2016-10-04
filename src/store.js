@@ -7,7 +7,7 @@ import {autoRehydrate, persistStore} from 'redux-persist';
 import immutableTransform from 'redux-persist-transform-immutable';
 /* Local Imports. */
 import * as reducers from './reducers';
-import {FilterSettings, Todo} from './types';
+import {Card, Deck} from './types';
 
 /********************************/
 // Local Declarations.
@@ -15,17 +15,29 @@ import {FilterSettings, Todo} from './types';
 const reducer = combineReducers(reducers);
 
 const InitialState = {
-  todos: List(),
-  filter: FilterSettings.all
+  decks: List(),
+  deck_to_edit: null
 };
 
 /********************************/
 // Exported Declarations.
 /********************************/
+export const getDeckById = (id: number) => (
+    STORE.getState().decks.find(d => d.id === id)
+);
+
+export const getNextDeckId = () => {
+  let max_id = -1;
+  for (const d of STORE.getState().decks) {
+    max_id = Math.max(max_id, d.id);
+  }
+  return max_id + 1;
+};
+
 export const dispatch = (action: Object) => STORE.dispatch(action);
 
 export const STORE = createStore(reducer, InitialState, autoRehydrate());
 persistStore(STORE, {
   storage: AsyncStorage,
-  transforms: [immutableTransform({records: [Todo]})]
+  transforms: [immutableTransform({records: [Deck, Card]})]
 });

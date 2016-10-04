@@ -1,6 +1,7 @@
 /* @flow */
 /* External Imports. */
 import React from 'react';
+import {Dimensions} from 'react-native';
 import {Icon} from 'react-native-elements';
 /* Local Imports. */
 import {setDeckToEdit} from '../actions';
@@ -9,11 +10,12 @@ import {connect} from 'react-redux';
 /********************************/
 // Local Declarations.
 /********************************/
+const {height, width} = Dimensions.get('window');
 const styles = {
   add: {
     position: 'absolute',
-    top: 590,
-    left: 343,
+    top: height - 100,
+    left: width - 75,
     backgroundColor: 'rgba(0, 125, 0, 1)'
   }
 };

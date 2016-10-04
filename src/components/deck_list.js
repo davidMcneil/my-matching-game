@@ -2,8 +2,8 @@
 /* External Imports. */
 import {List} from 'immutable';
 import React from 'react';
-import {Image, StyleSheet, Text, TouchableHighlight, ScrollView, View
-       } from 'react-native';
+import {Dimensions, Image, StyleSheet, Text, TouchableHighlight, ScrollView,
+        View} from 'react-native';
 import {connect} from 'react-redux';
 import {Icon} from 'react-native-elements';
 /* Local Imports. */
@@ -13,9 +13,11 @@ import {Deck as DeckRecord} from '../types';
 /********************************/
 // Local Declarations.
 /********************************/
+const {height, width} = Dimensions.get('window');
+
 const styles = StyleSheet.create({
   scrollContainer: {
-    height: 600,
+    height: height - 75,
     marginTop: 10,
     borderColor: 'rgba(230, 230, 230, 1)',
     borderTopWidth: 2,

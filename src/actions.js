@@ -49,13 +49,13 @@ export const makeGuess = (id: number, correct: boolean) => ({
   correct
 });
 
-export const setDeckToEdit = (id: number) => ({
-  type: SET_DECK_TO_EDIT,
+export const clearDeckStats = (id: number) => ({
+  type: CLEAR_DECK_STATS,
   id
 });
 
-export const clearDeckStats = (id: number) => ({
-  type: CLEAR_DECK_STATS,
+export const setDeckToEdit = (id: number) => ({
+  type: SET_DECK_TO_EDIT,
   id
 });
 

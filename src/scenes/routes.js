@@ -7,12 +7,15 @@
 /********************************/
 const SceneIds = Object.freeze({
   deck_list: 'DECK_LIST',
-  deck_edit: 'DECK_EDIT'
+  deck_edit: 'DECK_EDIT',
+  camera: 'CAMERA'
 });
 
 const deck_list = {id: SceneIds.deck_list};
 
 const deck_edit = {id: SceneIds.deck_edit};
+
+const camera = {id: SceneIds.camera};
 
 /********************************/
 // Exported Declarations.
@@ -23,6 +26,10 @@ export const toDeckListFromDeckEdit = (navigator: Object) => navigator.pop();
 
 export const toDeckEditFromDeckList = (navigator: Object) => (
   navigator.push(deck_edit)
+);
+
+export const toCameraFromDeckEdit = (navigator: Object) => (
+  navigator.push(camera)
 );
 
 export const INITIAL_ROUTE_STACK = [deck_list];

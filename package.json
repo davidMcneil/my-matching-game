@@ -4,12 +4,13 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "stats" : "sloc src"
+    "stats": "sloc src"
   },
   "dependencies": {
     "immutable": "^3.8.1",
     "react": "15.3.2",
     "react-native": "0.34.0",
+    "react-native-camera": "git+https://github.com/lwansbrough/react-native-camera.git",
     "react-native-elements": "^0.6.0",
     "react-native-vector-icons": "^2.1.0",
     "react-redux": "^4.4.5",

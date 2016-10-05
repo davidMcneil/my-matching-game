@@ -1,7 +1,7 @@
 /* @flow */
 /* External Imports. */
 import React from 'react';
-import {StyleSheet, Text, TextInput, View} from 'react-native';
+import {Alert, StyleSheet, Text, TextInput, View} from 'react-native';
 import {Button, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 /* Local Imports. */
@@ -122,20 +122,35 @@ class Editable extends React.Component {
   }
   onResetPress() {
     if (this.props.deck) {
-      dispatch(actions.clearDeckStats(this.props.deck.id));
+      Alert.alert( 'Reset Score',
+        'Are you sure you want to proceed this operation is permanent?', 
+        [{text: 'Cancel', undefined, style: 'cancel'},
+        {text: 'Reset', onPress: () => {
+          dispatch(actions.clearDeckStats(this.props.deck.id));
+        }}]);
     }
   }
   onDeletePress() {
     if (this.props.deck) {
-      dispatch(actions.removeDeck(this.props.deck.id));
+      Alert.alert( 'Delete Deck',
+        'Are you sure you want to proceed this operation is permanent?', 
+        [{text: 'Cancel', undefined, style: 'cancel'},
+        {text: 'Delete', onPress: () => {
+          this.props.toDeckList();
+          const id = this.props.deck.id;
+          dispatch(actions.setDeckToEdit(null));
+          dispatch(actions.removeDeck(id));
+        }}]);
+    } else {
+      this.props.toDeckList();
     }
-    this.props.toDeckList();
   }
   render() {
     return (
       <View>
         <View style={styles.editName}>
           <TextInput style={styles.nameInput}
+            autoFocus={true}
             value={this.state.name}
             placeholder='Deck name...'
             autoCapitalize='words'

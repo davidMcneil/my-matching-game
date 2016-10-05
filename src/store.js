@@ -26,6 +26,8 @@ export const getDeckById = (id: number) => (
     STORE.getState().decks.find(d => d.id === id)
 );
 
+export const getDeckToEdit = () => (getDeckById(STORE.getState().deck_to_edit));
+
 export const getNextDeckId = () => {
   let max_id = -1;
   for (const d of STORE.getState().decks) {

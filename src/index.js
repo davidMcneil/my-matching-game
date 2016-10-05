@@ -4,6 +4,7 @@ import React from 'react';
 import {BackAndroid, Navigator} from 'react-native';
 import {Provider} from 'react-redux';
 /* Local Imports. */
+import {CameraScene} from './scenes/camera_scene';
 import {DeckEditScene} from './scenes/deck_edit_scene';
 import {DeckListScene} from './scenes/deck_list_scene';
 import * as routes from './scenes/routes.js';
@@ -30,7 +31,10 @@ const renderScene = (route, navigator) => {
       toDeckEdit={() => routes.toDeckEditFromDeckList(navigator)}/>;
   case routes.SceneIds.deck_edit:
     return <DeckEditScene
-      toDeckList={() => routes.toDeckListFromDeckEdit(navigator)}/>;
+      toDeckList={() => routes.toDeckListFromDeckEdit(navigator)}
+      toCamera={() => routes.toCameraFromDeckEdit(navigator)}/>;
+  case routes.SceneIds.camera:
+    return <CameraScene/>;
   default:
     console.error('Invalid scene id!');
   }
@@ -41,6 +45,8 @@ const configureScene = (route) => {
   case routes.SceneIds.deck_list:
     return Navigator.SceneConfigs.FadeAndroid;
   case routes.SceneIds.deck_edit:
+    return Navigator.SceneConfigs.FadeAndroid;
+  case routes.SceneIds.camera:
     return Navigator.SceneConfigs.FadeAndroid;
   default:
     console.error('Invalid scene id!');

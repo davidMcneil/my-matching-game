@@ -1,7 +1,7 @@
 /* @flow */
 /* External Imports. */
 import React from 'react';
-import {Alert, StyleSheet, Text, TextInput, View} from 'react-native';
+import {Alert, Image, StyleSheet, Text, TextInput, View} from 'react-native';
 import {Button, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 /* Local Imports. */
@@ -68,33 +68,38 @@ const styles = StyleSheet.create({
 });
 
 const Static = (props: {deck: Deck, toDeckList: Function,
-                        openEditable: Function}) => (
-  <View style={styles.staticHeader}>
-    <Button icon={{type: 'font-awesome', name: 'chevron-left',
-                  style: styles.backIcon}}
-      backgroundColor='rgba(230, 230, 230, 1)'
-      buttonStyle={styles.backButton}
-      title=''
-      onPress={() => props.toDeckList()} />
-    <View style={styles.staticText}>
-      <Text style={styles.staticTitle}>
-        {`${props.deck.name}`}
-      </Text>
-      <Text style={styles.staticScore}>
-        {`${props.deck.correct}/${props.deck.total}`}
-      </Text>
+                        openEditable: Function}) => {
+  const image = props.deck.cards.count() > 0 ? props.deck.cards.get(props.deck.avatar).image : 'https://thumb1.shutterstock.com/display_pic_with_logo/10654/116211973/stock-vector-illustration-of-zoo-and-animals-in-a-beautiful-nature-116211973.jpg';
+  return (
+    <View style={styles.staticHeader}>
+      <Button icon={{type: 'font-awesome', name: 'chevron-left',
+                    style: styles.backIcon}}
+        backgroundColor='rgba(230, 230, 230, 1)'
+        buttonStyle={styles.backButton}
+        title=''
+        onPress={() => props.toDeckList()} />
+      <View style={styles.staticText}>
+        <Image source={{uri: image}}
+               style={{width: 30, height: 30, borderRadius: 15}}/>
+        <Text style={styles.staticTitle}>
+          {`${props.deck.name}`}
+        </Text>
+        <Text style={styles.staticScore}>
+          {`${props.deck.correct}/${props.deck.total}`}
+        </Text>
+      </View>
+      <Icon type='font-awesome'
+        name='pencil'
+        size={10}
+        raised={true}
+        color='rgba(57, 63, 69, 1)'
+        underlayColor='rgba(230, 230, 230, 1)'
+        iconStyle={{fontSize: 16}}
+        containerStyle={{backgroundColor: 'rgba(255, 255, 255, 1)'}}
+        onPress={() => props.openEditable()} />
     </View>
-    <Icon type='font-awesome'
-      name='pencil'
-      size={10}
-      raised={true}
-      color='rgba(57, 63, 69, 1)'
-      underlayColor='rgba(230, 230, 230, 1)'
-      iconStyle={{fontSize: 16}}
-      containerStyle={{backgroundColor: 'rgba(255, 255, 255, 1)'}}
-      onPress={() => props.openEditable()} />
-  </View>
-);
+  );
+};
 
 class Editable extends React.Component {
   static propTypes = {

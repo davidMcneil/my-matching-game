@@ -16,28 +16,14 @@ const reducer = combineReducers(reducers);
 
 const InitialState = {
   decks: List(),
-  deck_to_edit: null
+  cards: List(),
+  next_id: 0,
+  selected_deck: null
 };
 
 /********************************/
 // Exported Declarations.
 /********************************/
-export const getDeckById = (id: number) => (
-    STORE.getState().decks.find(d => d.id === id)
-);
-
-export const getDeckToEdit = () => (getDeckById(STORE.getState().deck_to_edit));
-
-export const getNextDeckId = () => {
-  let max_id = -1;
-  for (const d of STORE.getState().decks) {
-    max_id = Math.max(max_id, d.id);
-  }
-  return max_id + 1;
-};
-
-export const dispatch = (action: Object) => STORE.dispatch(action);
-
 export const STORE = createStore(reducer, InitialState, autoRehydrate());
 persistStore(STORE, {
   storage: AsyncStorage,

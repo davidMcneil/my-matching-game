@@ -4,7 +4,7 @@ import React from 'react';
 import {Dimensions} from 'react-native';
 import {Icon} from 'react-native-elements';
 /* Local Imports. */
-import {setDeckToEdit} from '../actions';
+import {updateSelectedDeck} from '../actions';
 import {connect} from 'react-redux';
 
 /********************************/
@@ -21,12 +21,13 @@ const styles = {
 };
 
 export const Button = (props: {toDeckEdit: Function, onPress: Function}) => (
-  <Icon type='font-awesome'
-    name='plus'
+  <Icon name='plus'
+    type='font-awesome'
     size={26}
     raised={true}
     color='rgba(255, 255, 255, 1)'
     underlayColor='rgba(0, 175, 0, 1)'
+    iconStyle={{}}
     containerStyle={styles.add}
     onPress={() => props.onPress()} />
 );
@@ -36,7 +37,7 @@ const mapStateToProps = () => ({
 
 const mapDispatchToProps = (dispatch, props) => ({
   onPress: () => {
-    dispatch(setDeckToEdit(null));
+    dispatch(updateSelectedDeck(null));
     props.toDeckEdit();
   }
 });

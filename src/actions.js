@@ -1,7 +1,6 @@
 /* @flow */
 /* External Imports. */
 /* Local Imports. */
-import {Card} from './types';
 
 /********************************/
 // Local Declarations.
@@ -10,35 +9,35 @@ import {Card} from './types';
 /********************************/
 // Exported Declarations.
 /********************************/
-export const ADD_DECK = 'ADD_DECK';
-export const REMOVE_DECK = 'REMOVE_DECK';
-export const SET_DECK_NAME = 'SET_DECK_NAME';
-export const SET_DECK_AVATAR = 'SET_DECK_AVATAR';
-export const CLEAR_DECK_STATS = 'CLEAR_DECK_STATS';
+export const CREATE_DECK = 'CREATE_DECK';
+export const DELETE_DECK = 'DELETE_DECK';
+export const UPDATE_DECK_NAME = 'UPDATE_DECK_NAME';
+export const UPDATE_DECK_AVATAR = 'UPDATE_DECK_AVATAR';
+export const RESET_DECK_STATS = 'RESET_DECK_STATS';
 export const MAKE_GUESS = 'MAKE_GUESS';
-export const SET_DECK_TO_EDIT = 'SET_DECK_TO_EDIT';
-export const ADD_CARD = 'ADD_CARD';
-export const REMOVE_CARD = 'REMOVE_CARD';
+export const CREATE_CARD = 'CREATE_CARD';
+export const DELETE_CARD = 'DELETE_CARD';
+export const UPDATE_SELECTED_DECK = 'UPDATE_SELECTED_DECK';
 
-export const addDeck = (id: number, name: string = '') => ({
-  type: ADD_DECK,
+export const createDeck = (id: number, name: string = '') => ({
+  type: CREATE_DECK,
   id,
   name
 });
 
-export const removeDeck = (id: number) => ({
-  type: REMOVE_DECK,
+export const deltetDeck = (id: number) => ({
+  type: DELETE_DECK,
   id
 });
 
-export const setDeckName = (id: number, name: string) => ({
-  type: SET_DECK_NAME,
+export const updateDeckName = (id: number, name: string) => ({
+  type: UPDATE_DECK_NAME,
   id,
   name
 });
 
-export const setDeckAvatar = (id: number, avatar: number) => ({
-  type: SET_DECK_AVATAR,
+export const updateDeckAvatar = (id: number, avatar: string) => ({
+  type: UPDATE_DECK_AVATAR,
   id,
   avatar
 });
@@ -49,25 +48,23 @@ export const makeGuess = (id: number, correct: boolean) => ({
   correct
 });
 
-export const clearDeckStats = (id: number) => ({
-  type: CLEAR_DECK_STATS,
+export const resetDeckStats = (id: number) => ({
+  type: RESET_DECK_STATS,
   id
 });
 
-export const setDeckToEdit = (id: number) => ({
-  type: SET_DECK_TO_EDIT,
+export const createCard = (id: number, deck_id: number) => ({
+  type: CREATE_CARD,
+  id,
+  deck_id,
+});
+
+export const deleteCard = (id: number) => ({
+  type: DELETE_CARD,
   id
 });
 
-export const addCard = (id: number, image: string, audio: string) => ({
-  type: ADD_CARD,
-  id,
-  image,
-  audio
-});
-
-export const removeCard = (id: number, card: Card) => ({
-  type: REMOVE_CARD,
-  id,
-  card
+export const updateSelectedDeck = (id: number) => ({
+  type: UPDATE_SELECTED_DECK,
+  id
 });

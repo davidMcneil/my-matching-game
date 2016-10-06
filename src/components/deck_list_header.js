@@ -12,16 +12,16 @@ const styles = StyleSheet.create({
   header: {
     flexDirection:'row',
     backgroundColor: 'rgba(230, 230, 230, 1)',
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
   },
-  placeholder: {
+  filler: {
     flex: 1,
   },
   title: {
     flex: 3,
     justifyContent:'center',
-    color: 'rgba(57, 63, 69, 1)',
-    fontSize: 26
+    fontSize: 26,
+    color: 'rgba(57, 63, 69, 1)'
   }
 });
 
@@ -30,12 +30,12 @@ const styles = StyleSheet.create({
 /********************************/
 export const DeckListHeader = () => (
   <View style={styles.header}>
-    <View style={styles.placeholder}></View>
+    <View style={styles.filler}></View>
     <Text style={styles.title}>
       My Matching Game
     </Text>
-    <Icon type='font-awesome'
-      name='question'
+    <Icon name='question'
+      type='font-awesome'
       size={10}
       raised={true}
       color='rgba(57, 63, 69, 1)'

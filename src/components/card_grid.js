@@ -4,13 +4,13 @@ import {List} from 'immutable';
 import React from 'react';
 import {Alert, Dimensions, Image, StyleSheet, TouchableHighlight, ScrollView,
         View} from 'react-native';
-import {AudioPlayer, AudioRecorder, AudioUtils} from 'react-native-audio';
+import {AudioPlayer, AudioRecorder} from 'react-native-audio';
 import {Button, Icon} from 'react-native-elements';
+import RNFS from 'react-native-fs';
 import {connect} from 'react-redux';
 /* Local Imports. */
 import * as actions from '../actions';
-import {dispatch, getDeckToEdit} from '../store';
-import {Card as CardRecord, Deck} from '../types';
+import {Card as CardRecord, getCardAudioPath, getCardImagePath} from '../types';
 
 /********************************/
 // Local Declarations.
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     width: width
   },
-  leftContent: {
+  iconAndControls: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -57,12 +57,22 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: 'rgba(57, 63, 69, 1)'
   },
-  card: {
+  staticCard: {
     borderColor: 'rgba(230, 230, 230, 1)',
     borderWidth: 1,
     width: 60,
     height: 80,
     margin: 5
+  },
+  noAudioIcon: {
+    margin: 0,
+    padding: 0,
+    fontSize: 16,
+    color: 'rgba(175, 0, 0, 1)'
+  },
+  noAudioContainer: {
+    marginLeft: 0,
+    padding: 0
   },
   avatar: {
     width: 80,
@@ -73,28 +83,79 @@ const styles = StyleSheet.create({
   }
 });
 
-class EditableCard extends React.Component {
+class StaticCard extends React.Component {
   static propTypes = {
     card: React.PropTypes.instanceOf(CardRecord),
-    deck: React.PropTypes.instanceOf(Deck),
     setEditable: React.PropTypes.func,
-    index: React.PropTypes.number
   };
-  state: {recording: boolean};
+  state: {has_audio: boolean};
   constructor(props) {
     super(props);
-    this.state = {recording: false};
+    this.state = {has_audio: false};
+    RNFS.exists(getCardAudioPath(this.props.card))
+      .then((data) => {
+        this.setState({has_audio: data});
+      }).catch(err => console.error(err));
   }
-  _stop() {
+  render() {
+    return (
+      <View style={styles.staticCard}>
+        <TouchableHighlight underlayColor='rgba(230, 230, 230, 1)'
+          onPress={() => this.props.setEditable()}>
+          <View>
+            {(() => {
+              if (!this.state.has_audio) {
+                return (
+                  <Button icon={{
+                    type: 'octicon',
+                    name: 'mute',
+                    style: styles.noAudioIcon
+                  }}
+                  backgroundColor='rgba(0, 0, 0, 0)'
+                  buttonStyle={styles.noAudioContainer}
+                  textStyle={styles.noAudioIcon}
+                  title=''
+                  onPress={() => this.onResetPress()}/>
+                );
+              }
+            })()}
+            <Image source={{uri: `file://${getCardImagePath(this.props.card)}`}}
+              style={styles.avatar}/>
+          </View>
+        </TouchableHighlight>
+      </View>
+    );
+  }
+}
+
+class Editable extends React.Component {
+  static propTypes = {
+    card: React.PropTypes.instanceOf(CardRecord),
+    setUneditable: React.PropTypes.func,
+    setAvatar: React.PropTypes.func,
+    deleteCard: React.PropTypes.func
+  };
+  state: {
+    recording: boolean,
+    has_audio: boolean
+  };
+  constructor(props) {
+    super(props);
+    this.state = {recording: false, has_audio: false};
+    RNFS.exists(getCardAudioPath(this.props.card))
+      .then((data) => {
+        this.setState({has_audio: data});
+      }).catch(err => console.error(err));
+  }
+  stop() {
     if (this.state.recording) {
       AudioRecorder.stopRecording();
-      this.setState({recording: false});
+      this.setState({recording: false, has_audio: true});
     }
   }
-  _record() {
+  record() {
     if(!this.state.recording){
-      let audioPath = `${AudioUtils.DocumentDirectoryPath}/deck_${this.props.deck.id}_${this.props.index}.aac`;
-      AudioRecorder.prepareRecordingAtPath(audioPath, {
+      AudioRecorder.prepareRecordingAtPath(getCardAudioPath(this.props.card), {
         SampleRate: 22050,
         Channels: 1,
         AudioQuality: 'Low',
@@ -105,43 +166,41 @@ class EditableCard extends React.Component {
       this.setState({recording: true});
     }
   }
-  _play() {
+  play() {
     if (this.state.recording) {
-      this._stop();
+      this.stop();
       this.setState({recording: false});
     }
-    let audioPath = `${AudioUtils.DocumentDirectoryPath}/deck_${this.props.deck.id}_${this.props.index}.aac`;
-    AudioPlayer.play(audioPath);
+    AudioPlayer.play(getCardAudioPath(this.props.card));
   }
-  setAvatar() {
-    dispatch(actions.setDeckAvatar(getDeckToEdit().id, this.props.index));
-  }
-  removeCard() {
+  deleteCard() {
     Alert.alert( 'Delete Card',
       'Are you sure you want to proceed this operation is permanent?', 
       [{text: 'Cancel', undefined, style: 'cancel'},
       {text: 'Delete', onPress: () => {
-        this.props.setEditable();
-        dispatch(actions.removeCard(getDeckToEdit().id, this.props.card));
+        this.props.deleteCard();
+        this.props.setUneditable();
       }}]);
   }
   render() {
     return (
       <View style={styles.editableCard}>
-        <View style={styles.leftContent}>
-          <Image source={{uri: this.props.card.image}} style={styles.avatar}/>
-          <Icon type='font-awesome'
-            name='volume-up'
+        <View style={styles.iconAndControls}>
+          <Image source={{uri: `file://${getCardImagePath(this.props.card)}`}}
+            style={styles.avatar}/>
+          <Icon type={this.state.has_audio ? 'font-awesome' : 'octicon'}
+            name={this.state.has_audio ? 'volume-up' : 'mute'}
             size={24}
             raised={true}
-            color='rgba(57, 63, 69, 1)'
+            color={this.state.has_audio ? 'rgba(57, 63, 69, 1)' :
+                                          'rgba(230, 230, 230, 1)'}
             underlayColor='rgba(230, 230, 230, 1)'
             iconStyle={{fontSize: 24}}
             containerStyle={{
               backgroundColor: 'rgba(255, 255, 255, 1)',
               margin: 4
             }}
-            onPress={() => this._play()}/>
+            onPress={this.state.has_audio ? () => this.play() : () => {}}/>
           <Icon type='font-awesome'
             name={this.state.recording ? 'stop' : 'microphone'}
             size={24}
@@ -153,8 +212,8 @@ class EditableCard extends React.Component {
               backgroundColor: 'rgba(255, 255, 255, 1)',
               margin: 4
             }}
-            onPress={this.state.recording ? () => this._stop() :
-                                            () => this._record()}/>
+            onPress={this.state.recording ? () => this.stop() :
+                                            () => this.record()}/>
           <Icon type='font-awesome'
             name='user'
             size={24}
@@ -166,7 +225,7 @@ class EditableCard extends React.Component {
               backgroundColor: 'rgba(255, 255, 255, 1)',
               margin: 4
             }}
-            onPress={() => this.setAvatar()}/>
+            onPress={() => this.props.setAvatar()}/>
           <Icon type='font-awesome'
             name='remove'
             size={24}
@@ -178,7 +237,7 @@ class EditableCard extends React.Component {
               backgroundColor: 'rgba(255, 255, 255, 1)',
               margin: 4
             }}
-            onPress={() => this.removeCard()} />
+            onPress={() => this.deleteCard()} />
         </View>
         <Button icon={{type: 'font-awesome', name: 'chevron-left',
                        style: styles.closeIcon}}
@@ -186,28 +245,33 @@ class EditableCard extends React.Component {
           buttonStyle={styles.closeButton}
           textStyle={styles.wideText}
           title=''
-          onPress={() => this.props.setEditable()}/>
+          onPress={() => this.props.setUneditable()}/>
       </View>
     );
   }
 }
 
-const Card = (props: {card: CardRecord,
-                      setEditable: Function}) => (
-  <View style={styles.card}>
-    <TouchableHighlight underlayColor='rgba(230, 230, 230, 1)'
-      onPress={() => props.setEditable()}>
-      <View>
-        <Image source={{uri: props.card.image}}
-               style={styles.avatar}/>
-      </View>
-    </TouchableHighlight>
-  </View>
-);
+const editableMapStateToProps = () => ({
+});
+
+const editableMapDispatchToProps = (dispatch, props) => ({
+  setAvatar: () =>  {
+    dispatch(actions.updateDeckAvatar(props.card.deck_id,
+                                      getCardImagePath(props.card)));
+  },
+  deleteCard: () => {
+    dispatch(actions.deleteCard(props.card.id));
+  }
+});
+
+const EditableCard = connect(
+  editableMapStateToProps,
+  editableMapDispatchToProps
+)(Editable);
 
 class Cards extends React.Component {
   static propTypes = {
-    deck: React.PropTypes.instanceOf(Deck),
+    cards: React.PropTypes.instanceOf(List),
   };
   state: {editing: number};
   constructor(props) {
@@ -218,22 +282,23 @@ class Cards extends React.Component {
     this.setState({editing: index});
   }
   render () {
-    const cards = this.props.deck ? this.props.deck.cards : List();
     return (
       <View style={styles.scrollContainer}>
-        <ScrollView style={styles.scroll}>
+        <ScrollView>
           <View style={styles.grid}>
-            {cards.map((c, i) => {
-              if (i === this.state.editing) {
-                return <EditableCard key={i}
-                  index={i}
-                  deck={this.props.deck}
-                  card={c}
-                  setEditable={() => this.setEditable(null)}/>;
+            {this.props.cards.map((c) => {
+              if (c.id === this.state.editing) {
+                return (
+                  <EditableCard key={c.id}
+                    card={c}
+                    setUneditable={() => this.setEditable(null)}/>
+                );
               } else {
-                return <Card key={i}
-                  card={c}
-                  setEditable={() => this.setEditable(i)}/>;
+                return (
+                  <StaticCard key={c.id}
+                    card={c}
+                    setEditable={() => this.setEditable(c.id)}/>
+                );
               }
             })}
           </View>
@@ -244,8 +309,8 @@ class Cards extends React.Component {
   }
 }
 
-const mapStateToProps = () => ({
-  deck: getDeckToEdit()
+const mapStateToProps = (state) => ({
+  cards: state.cards.filter(c => c.deck_id === state.selected_deck)
 });
 
 const mapDispatchToProps = () => ({

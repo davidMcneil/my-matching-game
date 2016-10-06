@@ -7,7 +7,6 @@ import {connect} from 'react-redux';
 /* Local Imports. */
 import * as actions from '../actions';
 import {Deck} from '../types';
-import {dispatch, getDeckById, getNextDeckId} from '../store';
 
 /********************************/
 // Local Declarations.
@@ -20,12 +19,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(230, 230, 230, 1)',
     borderBottomWidth: 1
   },
-  staticText: {
+  staticTitle: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
   },
-  staticTitle: {
+  staticName: {
     marginRight: 10,
     color: 'rgba(57, 63, 69, 1)',
     fontSize: 26
@@ -67,29 +66,31 @@ const styles = StyleSheet.create({
   }
 });
 
-const Static = (props: {deck: Deck, toDeckList: Function,
+const StaticHeader = (props: {deck: Deck, toDeckList: Function,
                         openEditable: Function}) => {
-  const image = props.deck.cards.count() > 0 ? props.deck.cards.get(props.deck.avatar).image : 'https://thumb1.shutterstock.com/display_pic_with_logo/10654/116211973/stock-vector-illustration-of-zoo-and-animals-in-a-beautiful-nature-116211973.jpg';
+  const image = props.deck.avatar ? `file://${props.deck.avatar}` :
+    'https://thumb1.shutterstock.com/display_pic_with_logo/10654/116211973/stock-vector-illustration-of-zoo-and-animals-in-a-beautiful-nature-116211973.jpg';
   return (
     <View style={styles.staticHeader}>
       <Button icon={{type: 'font-awesome', name: 'chevron-left',
-                    style: styles.backIcon}}
+          style: styles.backIcon}}
         backgroundColor='rgba(230, 230, 230, 1)'
         buttonStyle={styles.backButton}
+        textStyle={{}}
         title=''
         onPress={() => props.toDeckList()} />
-      <View style={styles.staticText}>
+      <View style={styles.staticTitle}>
         <Image source={{uri: image}}
                style={{width: 30, height: 30, borderRadius: 15}}/>
-        <Text style={styles.staticTitle}>
+        <Text style={styles.staticName}>
           {`${props.deck.name}`}
         </Text>
         <Text style={styles.staticScore}>
           {`${props.deck.correct}/${props.deck.total}`}
         </Text>
       </View>
-      <Icon type='font-awesome'
-        name='pencil'
+      <Icon name='pencil'
+        type='font-awesome'
         size={10}
         raised={true}
         color='rgba(57, 63, 69, 1)'
@@ -105,7 +106,12 @@ class Editable extends React.Component {
   static propTypes = {
     deck: React.PropTypes.instanceOf(Deck),
     toDeckList: React.PropTypes.func,
-    closeEditable: React.PropTypes.func
+    closeEditable: React.PropTypes.func,
+    next_id: React.PropTypes.number,
+    create: React.PropTypes.func,
+    update: React.PropTypes.func,
+    reset: React.PropTypes.func,
+    delete: React.PropTypes.func
   };
   state: {name: string};
   constructor(props) {
@@ -115,11 +121,9 @@ class Editable extends React.Component {
   onSavePress() {
     if(this.state.name.trim().length > 0) {
       if (this.props.deck) {
-        dispatch(actions.setDeckName(this.props.deck.id, this.state.name));
+        this.props.update(this.state.name);
       } else {
-        let id = getNextDeckId();
-        dispatch(actions.addDeck(id, this.state.name));
-        dispatch(actions.setDeckToEdit(id));
+        this.props.create(this.props.next_id, this.state.name);
       }
       this.setState({name: ''});
       this.props.closeEditable();
@@ -130,9 +134,7 @@ class Editable extends React.Component {
       Alert.alert( 'Reset Score',
         'Are you sure you want to proceed this operation is permanent?', 
         [{text: 'Cancel', undefined, style: 'cancel'},
-        {text: 'Reset', onPress: () => {
-          dispatch(actions.clearDeckStats(this.props.deck.id));
-        }}]);
+        {text: 'Reset', onPress: () => this.props.delete()}]);
     }
   }
   onDeletePress() {
@@ -142,9 +144,7 @@ class Editable extends React.Component {
         [{text: 'Cancel', undefined, style: 'cancel'},
         {text: 'Delete', onPress: () => {
           this.props.toDeckList();
-          const id = this.props.deck.id;
-          dispatch(actions.setDeckToEdit(null));
-          dispatch(actions.removeDeck(id));
+          this.props.delete();
         }}]);
     } else {
       this.props.toDeckList();
@@ -171,14 +171,14 @@ class Editable extends React.Component {
             onPress={() => this.onSavePress()} />
         </View>
         <Button icon={{type: 'font-awesome', name: 'refresh',
-                       style: styles.wideIcon}}
+            style: styles.wideIcon}}
           backgroundColor='rgba(230, 230, 230, 1)'
           buttonStyle={styles.wideButton}
           textStyle={styles.wideText}
           title='Reset Score'
           onPress={() => this.onResetPress()}/>
         <Button icon={{type: 'font-awesome', name: 'remove',
-                       style: styles.wideIcon}}
+            style: styles.wideIcon}}
           backgroundColor='rgba(230, 230, 230, 1)'
           buttonStyle={styles.wideButton}
           textStyle={styles.wideText}
@@ -188,6 +188,32 @@ class Editable extends React.Component {
     );
   }
 }
+
+const editableMapStateToProps = (state) => ({
+  next_id: state.next_id
+});
+
+const editableMapDispatchToProps = (dispatch, props) => ({
+  create: (id, name) => {
+    dispatch(actions.createDeck(id, name));
+    dispatch(actions.updateSelectedDeck(id));
+  },
+  update: (name) => {
+    dispatch(actions.updateDeckName(props.deck.id, name));
+  },
+  reset: () => {
+    dispatch(actions.resetDeckStats(props.deck.id));
+  },
+  delete: () => {
+    dispatch(actions.updateSelectedDeck(null));
+    dispatch(actions.deleteDeck(props.deck.id));
+  }
+});
+
+const EditableHeader = connect(
+  editableMapStateToProps,
+  editableMapDispatchToProps
+)(Editable);
 
 class Header extends React.Component {
   static propTypes = {
@@ -201,18 +227,22 @@ class Header extends React.Component {
   }
   render() {
     if (!this.props.deck || this.state.editable) {
-      return <Editable deck={this.props.deck}
-                       toDeckList={this.props.toDeckList}
-                       closeEditable={() => this.setState({editable: false})}/>;
+      return (
+        <EditableHeader deck={this.props.deck}
+          toDeckList={this.props.toDeckList}
+          closeEditable={() => this.setState({editable: false})}/>
+      );
     }
-    return <Static deck={this.props.deck}
-                   toDeckList={this.props.toDeckList}
-                   openEditable={() => this.setState({editable: true})}/>;
+    return (
+      <StaticHeader deck={this.props.deck}
+        toDeckList={this.props.toDeckList}
+        openEditable={() => this.setState({editable: true})}/>
+    );
   }
 }
 
 const mapStateToProps = (state) => ({
-  deck: getDeckById(state.deck_to_edit)
+  deck: state.decks.find(d => d.id === state.selected_deck)
 });
 
 const mapDispatchToProps = () => ({

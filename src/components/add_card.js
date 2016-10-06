@@ -19,13 +19,13 @@ const styles = {
 };
 
 export const AddCard = (props: {toCamera: Function}) => (
-  <Icon type='font-awesome'
-    name='file-image-o'
+  <Icon name='file-image-o'
+    type='font-awesome'
     size={26}
     raised={true}
-    iconStyle={{fontSize: 34}}
     color='rgba(255, 255, 255, 1)'
     underlayColor='rgba(0, 175, 0, 1)'
+    iconStyle={{fontSize: 34}}
     containerStyle={styles.add}
     onPress={() => props.toCamera()} />
 );

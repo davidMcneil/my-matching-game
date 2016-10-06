@@ -3,10 +3,12 @@
 import React, {Component} from 'react';
 import {Dimensions, StyleSheet, View} from 'react-native';
 import {Icon} from 'react-native-elements';
+import RNFS from 'react-native-fs';
 import Camera from 'react-native-camera';
+import {connect} from 'react-redux';
 /* Local Imports. */
-import {addCard} from '../actions';
-import {dispatch, getDeckToEdit} from '../store';
+import {createCard, deleteCard} from '../actions';
+import {Deck, getImagePath} from '../types';
 
 /********************************/
 // Local Declarations.
@@ -28,19 +30,30 @@ const styles = StyleSheet.create({
   }
 });
 
-/********************************/
-// Exported Declarations.
-/********************************/
-export class CameraScene extends Component {
-  static propTypes = {};
+class CameraComp extends Component {
+  static propTypes = {
+    deck: React.PropTypes.instanceOf(Deck),
+    next_id: React.PropTypes.number,
+    create: React.PropTypes.func,
+    delete: React.PropTypes.func
+  };
   constructor(props) {
     super(props);
   }
   takePicture() {
-    this.camera.capture()
-      .then((data) => {
-        dispatch(addCard(getDeckToEdit().id, data.path, 'audio'));
-      }).catch(err => console.error(err));
+    if (this.props.deck){
+      this.camera.capture()
+        .then((data) => {
+          const id = this.props.next_id;
+          this.props.create(id, this.props.deck.id);
+          RNFS.moveFile(data.path.replace('file://', ''),
+                        getImagePath(id, this.props.deck.id))
+            .catch(err => {
+              this.props.delete(id);          
+              console.error(err);
+            });
+        }).catch(err => console.error(err));
+    }
   }
   render() {
     return (
@@ -55,8 +68,8 @@ export class CameraScene extends Component {
           orientation={Camera.constants.Orientation.auto}
           playSoundOnCapture={true}
           flashMode={Camera.constants.FlashMode.auto}>
-          <Icon type='font-awesome'
-            name='camera'
+          <Icon name='camera'
+            type='font-awesome'
             size={26}
             raised={true}
             color='rgba(57, 63, 69, 1)'
@@ -71,7 +84,28 @@ export class CameraScene extends Component {
       </View>
     );
   }
-
 }
+
+const mapStateToProps = (state) => ({
+  deck: state.decks.find(d => d.id === state.selected_deck),
+  next_id: state.next_id
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  create: (id, deck_id) => {
+    dispatch(createCard(id, deck_id));
+  },
+  delete: (id) => {
+    dispatch(deleteCard(id));
+  }
+});
+
+/********************************/
+// Exported Declarations.
+/********************************/
+export const CameraScene = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CameraComp);
 
 export {CameraScene as default};

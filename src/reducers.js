@@ -54,6 +54,13 @@ export const cards = (state: List<Card> = List(), action: Object) => {
     return state.push(Card({...action}));
   case actions.DELETE_CARD:
     return state.filter(c => c.id !== action.id);
+  case actions.SET_AUDIO_SET:
+    return state.map(c => {
+      if (c.id === action.id) {
+        return c.set('audio_set', true);
+      }
+      return c;
+    });
   default:
     return state;
   }

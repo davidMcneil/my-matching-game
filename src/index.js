@@ -7,6 +7,7 @@ import {Provider} from 'react-redux';
 import {CameraScene} from './scenes/camera_scene';
 import {DeckEditScene} from './scenes/deck_edit_scene';
 import {DeckListScene} from './scenes/deck_list_scene';
+import {DeckPlayScene} from './scenes/deck_play_scene';
 import * as routes from './scenes/routes.js';
 import {STORE} from './store';
 
@@ -28,7 +29,10 @@ const renderScene = (route, navigator) => {
   switch (route.id) {
   case routes.SceneIds.deck_list:
     return <DeckListScene
+      toDeckPlay={() => routes.toDeckPlayFromDeckList(navigator)}
       toDeckEdit={() => routes.toDeckEditFromDeckList(navigator)}/>;
+  case routes.SceneIds.deck_play:
+    return <DeckPlayScene/>;
   case routes.SceneIds.deck_edit:
     return <DeckEditScene
       toDeckList={() => routes.toDeckListFromDeckEdit(navigator)}
@@ -43,6 +47,8 @@ const renderScene = (route, navigator) => {
 const configureScene = (route) => {
   switch (route.id) {
   case routes.SceneIds.deck_list:
+    return Navigator.SceneConfigs.FadeAndroid;
+  case routes.SceneIds.deck_play:
     return Navigator.SceneConfigs.FadeAndroid;
   case routes.SceneIds.deck_edit:
     return Navigator.SceneConfigs.FadeAndroid;

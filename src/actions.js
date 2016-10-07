@@ -17,9 +17,10 @@ export const RESET_DECK_STATS = 'RESET_DECK_STATS';
 export const MAKE_GUESS = 'MAKE_GUESS';
 export const CREATE_CARD = 'CREATE_CARD';
 export const DELETE_CARD = 'DELETE_CARD';
+export const SET_AUDIO_SET = 'SET_AUDIO_SET';
 export const UPDATE_SELECTED_DECK = 'UPDATE_SELECTED_DECK';
 
-export const createDeck = (id: number, name: string = '') => ({
+export const createDeck = (id: number, name: string) => ({
   type: CREATE_DECK,
   id,
   name
@@ -61,6 +62,11 @@ export const createCard = (id: number, deck_id: number) => ({
 
 export const deleteCard = (id: number) => ({
   type: DELETE_CARD,
+  id
+});
+
+export const setAudioSet = (id: number) => ({
+  type: SET_AUDIO_SET,
   id
 });
 

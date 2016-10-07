@@ -14,10 +14,11 @@ import DeckListHeader from '../components/deck_list_header';
 /********************************/
 // Exported Declarations.
 /********************************/
-export const DeckListScene = (props: {toDeckEdit: Function}) => (
+export const DeckListScene = (props: {toDeckEdit: Function, 
+                                      toDeckPlay: Function}) => (
   <View>
     <DeckListHeader/>
-    <DeckList toDeckEdit={props.toDeckEdit}/>
+    <DeckList toDeckEdit={props.toDeckEdit} toDeckPlay={props.toDeckPlay}/>
     <AddDeck toDeckEdit={props.toDeckEdit}/>
   </View>
 );

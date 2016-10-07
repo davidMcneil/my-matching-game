@@ -13,7 +13,8 @@ import RNFS from 'react-native-fs';
 /********************************/
 export const Card = Record({
   id: undefined,
-  deck_id: undefined
+  deck_id: undefined,
+  audio_set: false
 }, 'Card');
 
 export const getImagePath = (id, deck_id) => (

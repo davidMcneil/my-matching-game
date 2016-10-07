@@ -101,8 +101,9 @@ const Deck = (props: {deck: DeckRecord, onPlay: Function,
   );
 };
 
-const Decks = (props: {toDeckEdit: Function, decks: List<DeckRecord>,
-                       onPlay: Function, onEdit: Function }) => (
+const Decks = (props: {toDeckEdit: Function, toDeckPlay: Function,
+                       decks: List<DeckRecord>, onPlay: Function,
+                       onEdit: Function }) => (
   <View style={styles.scrollContainer}>
     <ScrollView>
       {props.decks.sort((d, o) => d.name.toLowerCase()
@@ -122,7 +123,10 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
-  onPlay: (d) => console.log(`open deck '${d.name}'`),
+  onPlay: (d) => {
+    dispatch(updateSelectedDeck(d.id));
+    props.toDeckPlay();
+  },
   onEdit: (d) => {
     dispatch(updateSelectedDeck(d.id));
     props.toDeckEdit();

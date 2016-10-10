@@ -26,7 +26,7 @@ export const createDeck = (id: number, name: string) => ({
   name
 });
 
-export const deltetDeck = (id: number) => ({
+export const deleteDeck = (id: number) => ({
   type: DELETE_DECK,
   id
 });

@@ -6,7 +6,6 @@ import {Alert, Dimensions, Image, StyleSheet, TouchableHighlight, ScrollView,
         View} from 'react-native';
 import {AudioPlayer, AudioRecorder} from 'react-native-audio';
 import {Button, Icon} from 'react-native-elements';
-import RNFS from 'react-native-fs';
 import {connect} from 'react-redux';
 /* Local Imports. */
 import * as actions from '../actions';
@@ -64,17 +63,10 @@ const styles = StyleSheet.create({
     height: 80,
     margin: 5
   },
-  noAudioIcon: {
-    margin: 0,
-    padding: 0,
-    fontSize: 16,
-    color: 'rgba(175, 0, 0, 1)'
-  },
-  noAudioContainer: {
-    marginLeft: 0,
-    padding: 0
-  },
   avatar: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
     width: 80,
     height: 100
   },
@@ -99,24 +91,22 @@ class StaticCard extends React.Component {
         <TouchableHighlight underlayColor='rgba(230, 230, 230, 1)'
           onPress={() => this.props.setEditable()}>
           <View>
-            {(() => {
-              if (!this.props.card.audio_set) {
-                return (
-                  <Button icon={{
-                    type: 'octicon',
-                    name: 'mute',
-                    style: styles.noAudioIcon
-                  }}
-                  backgroundColor='rgba(0, 0, 0, 0)'
-                  buttonStyle={styles.noAudioContainer}
-                  textStyle={styles.noAudioIcon}
-                  title=''
-                  onPress={() => this.onResetPress()}/>
-                );
-              }
-            })()}
             <Image source={{uri: `file://${getCardImagePath(this.props.card)}`}}
-              style={styles.avatar}/>
+              style={styles.avatar}>
+              {(() => {
+                if (!this.props.card.audio_set) {
+                  return (
+                    <Icon name='mute'
+                      type='octicon'
+                      size={18}
+                      raised={false}
+                      color='rgba(175, 0, 0, 1)'
+                      iconStyle={{}}
+                      containerStyle={{padding: 2, margin: 0}}/>
+                  );
+                }
+              })()}
+            </Image>
           </View>
         </TouchableHighlight>
       </View>

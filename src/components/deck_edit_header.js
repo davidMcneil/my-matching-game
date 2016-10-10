@@ -134,7 +134,10 @@ class Editable extends React.Component {
       Alert.alert( 'Reset Score',
         'Are you sure you want to proceed this operation is permanent?', 
         [{text: 'Cancel', undefined, style: 'cancel'},
-        {text: 'Reset', onPress: () => this.props.delete()}]);
+        {text: 'Reset', onPress: () => {
+          this.props.reset();
+          this.props.closeEditable();
+        }}]);
     }
   }
   onDeletePress() {

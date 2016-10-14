@@ -10,18 +10,19 @@ import {Icon} from 'react-native-elements';
 /********************************/
 const styles = StyleSheet.create({
   header: {
-    flexDirection:'row',
-    backgroundColor: 'rgba(230, 230, 230, 1)',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 125, 0, 1)',
     borderBottomWidth: 1,
-  },
-  filler: {
-    flex: 1,
+    paddingTop: 0,
+    paddingBottom: 0
   },
   title: {
     flex: 3,
-    justifyContent:'center',
+    justifyContent: 'center',
     fontSize: 26,
-    color: 'rgba(57, 63, 69, 1)'
+    color: 'rgba(255, 255, 255, 1)'
   }
 });
 
@@ -30,17 +31,16 @@ const styles = StyleSheet.create({
 /********************************/
 export const DeckListHeader = () => (
   <View style={styles.header}>
-    <View style={styles.filler}></View>
     <Text style={styles.title}>
       My Matching Game
     </Text>
     <Icon name='question'
       type='font-awesome'
-      size={10}
+      size={16}
       raised={true}
       color='rgba(57, 63, 69, 1)'
       underlayColor='rgba(230, 230, 230, 1)'
-      iconStyle={{fontSize: 16}}
+      iconStyle={{fontSize: 20}}
       containerStyle={{backgroundColor: 'rgba(255, 255, 255, 1)'}}
       onPress={() => console.log('help')} />
   </View>

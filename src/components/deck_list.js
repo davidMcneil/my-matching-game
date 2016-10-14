@@ -17,7 +17,7 @@ const {height} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    height: height - 75,
+    height: height - 90,
     marginTop: 10,
     borderColor: 'rgba(230, 230, 230, 1)',
     borderTopWidth: 2,
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   editIcon: {
     flex: 0,
     width: 40,
-    marginRight: 10
+    marginRight: 20
   },
   filler: {
     height: 120
@@ -88,11 +88,11 @@ const Deck = (props: {deck: DeckRecord, onPlay: Function,
         <View style={styles.editIcon}>
           <Icon name='pencil'
             type='font-awesome'
-            size={16}
+            size={20}
             raised={true}
             color='rgba(57, 63, 69, 1)'
             underlayColor='rgba(230, 230, 230, 1)'
-            iconStyle={{}}
+            iconStyle={{fontSize: 20}}
             containerStyle={{backgroundColor: 'rgba(255, 255, 255, 1)'}}
             onPress={() => props.onEdit()}/>
         </View>
@@ -105,16 +105,30 @@ const Decks = (props: {toDeckEdit: Function, toDeckPlay: Function,
                        decks: List<DeckRecord>, onPlay: Function,
                        onEdit: Function }) => (
   <View style={styles.scrollContainer}>
-    <ScrollView>
-      {props.decks.sort((d, o) => d.name.toLowerCase()
-          .localeCompare(o.name.toLowerCase()))
-        .map((d) => 
-          <Deck key={d.id}
-            deck={d}
-            onPlay={() => props.onPlay(d)}
-            onEdit={() => props.onEdit(d)}/>)}
-      <View style={styles.filler}></View>
-    </ScrollView>
+    {(() => {
+      if (props.decks.count() === 0) {
+        return (
+          <Text style={{fontSize: 24, textAlign: 'center', padding: 20}}>
+            You don't have any decks.
+            Press the plus button below to add a new deck
+            or press the help button above to view the app help.
+          </Text>
+        );
+      } else {
+        return (
+          <ScrollView>
+            {props.decks.sort((d, o) => d.name.toLowerCase()
+                .localeCompare(o.name.toLowerCase()))
+              .map((d) => 
+                <Deck key={d.id}
+                  deck={d}
+                  onPlay={() => props.onPlay(d)}
+                  onEdit={() => props.onEdit(d)}/>)}
+            <View style={styles.filler}></View>
+          </ScrollView>
+        );
+      }
+    })()}
   </View>
 );
 

@@ -60,9 +60,10 @@ export const createCard = (id: number, deck_id: number) => ({
   deck_id,
 });
 
-export const deleteCard = (id: number) => ({
+export const deleteCard = (id: number, deck_id: number) => ({
   type: DELETE_CARD,
-  id
+  id,
+  deck_id
 });
 
 export const setAudioSet = (id: number) => ({

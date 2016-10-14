@@ -2,7 +2,7 @@
 /* External Imports. */
 import {List} from 'immutable';
 import React, {Component} from 'react';
-import {Dimensions, Image, StyleSheet, TouchableHighlight, View
+import {Dimensions, Image, StyleSheet, Text, TouchableHighlight, View
        } from 'react-native';
 import {AudioPlayer} from 'react-native-audio';
 import {connect} from 'react-redux';
@@ -83,7 +83,7 @@ class DeckPlay extends Component {
   getNewCards() {
     const cards = this.props.cards
       .sortBy(()=>Math.random())
-      .take(List([4, 6, 8]).sortBy(()=>Math.random()).first());
+      .take(List([3, 4, 5, 6, 7, 8]).sortBy(()=>Math.random()).first());
     const correct = cards.sortBy(()=>Math.random()).first();
     let widths = List();
     for (let i = 0; i < (cards.count() / 2); i++) {
@@ -95,11 +95,10 @@ class DeckPlay extends Component {
     return {cards, correct, widths};
   }
   playAudio() {
-    if (!this.state.playing) {
+    if (!this.state.playing && this.props.cards.count() > 2) {
       this.setState({playing: true});
       AudioPlayer.play(getCardAudioPath(this.state.correct))
         .then(() => this.setState({playing: false}));
-      this.setState({playing: false});
     }
   }
   onCardPress(card) {
@@ -116,28 +115,44 @@ class DeckPlay extends Component {
   }
   render() {
     return (
-      <View style={styles.tiles}>
-        {this.state.cards.map((c, i) => {
-          if (c === this.state.correct) {
-            return <Tile key={c.id}
-              card={c}
-              color='rgba(0, 175, 0, 1)'
-              width={this.state.widths.get(i)}
-              height={HEIGHT / (this.state.cards.count() / 2)}
-              transparent={this.state.guessed_id !== null}
-              onPress={() => this.onCardPress(c)}/>;
+      <View>
+        {(() => {
+          if (this.props.cards.count() < 3) {
+            return (
+              <Text style={{fontSize: 24, textAlign: 'center', padding: 20}}>
+                You need at least 3 cards in this deck to play.
+                Return to the deck edit screen and add more cards to play.
+              </Text>
+            );
           } else {
-            return <Tile key={c.id}
-              card={c}
-              color='rgba(175, 0, 0, 1)'
-              width={this.state.widths.get(i)}
-              height={HEIGHT / (this.state.cards.count() / 2)}
-              transparent={this.state.guessed_id === c.id}
-              onPress={() => this.onCardPress(c)}/>;
+            return (
+              <View style={styles.tiles}>
+                {this.state.cards.map((c, i) => {
+                  if (c === this.state.correct) {
+                    return <Tile key={c.id}
+                      card={c}
+                      color='rgba(0, 175, 0, 1)'
+                      width={this.state.widths.get(i)}
+                      height={HEIGHT / Math.ceil(this.state.cards.count() / 2)}
+                      transparent={this.state.guessed_id !== null}
+                      onPress={() => this.onCardPress(c)}/>;
+                  } else {
+                    return <Tile key={c.id}
+                      card={c}
+                      color='rgba(175, 0, 0, 1)'
+                      width={this.state.widths.get(i)}
+                      height={HEIGHT / Math.ceil(this.state.cards.count() / 2)}
+                      transparent={this.state.guessed_id === c.id}
+                      onPress={() => this.onCardPress(c)}/>;
+                  }
+                })}
+                <PlayScore deck={this.props.deck}/>
+                <PlayAudio icon_name={this.state.playing ? 'volume-up' : 'play'} 
+                  playAudio={() => this.playAudio()}/>
+              </View>
+            );
           }
-        })}
-      <PlayScore deck={this.props.deck}/>
-      <PlayAudio playAudio={() => this.playAudio()}/>
+        })()}
       </View>
     );
   }

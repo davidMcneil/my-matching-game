@@ -18,8 +18,8 @@ const styles = {
   }
 };
 
-export const PlayAudio = (props: {playAudio: Function}) => (
-  <Icon name='volume-up'
+export const PlayAudio = (props: {icon_name: string, playAudio: Function}) => (
+  <Icon name={props.icon_name}
     type='font-awesome'
     size={26}
     raised={true}

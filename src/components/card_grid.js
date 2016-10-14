@@ -3,13 +3,14 @@
 import {List} from 'immutable';
 import React from 'react';
 import {Alert, Dimensions, Image, StyleSheet, TouchableHighlight, ScrollView,
-        View} from 'react-native';
+        Text, View} from 'react-native';
 import {AudioPlayer, AudioRecorder} from 'react-native-audio';
 import {Button, Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 /* Local Imports. */
 import * as actions from '../actions';
-import {Card as CardRecord, getCardAudioPath, getCardImagePath} from '../types';
+import {Card as CardRecord, Deck, getCardAudioPath, getCardImagePath
+       } from '../types';
 
 /********************************/
 // Local Declarations.
@@ -18,7 +19,7 @@ const {height, width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    height: height - 75,
+    height: height - 90,
     marginTop: 10,
     borderColor: 'rgba(230, 230, 230, 1)',
     borderTopWidth: 2,
@@ -116,18 +117,22 @@ class StaticCard extends React.Component {
 
 class Editable extends React.Component {
   static propTypes = {
+    deck: React.PropTypes.instanceOf(Deck),
+    first_card: React.PropTypes.instanceOf(CardRecord),
     card: React.PropTypes.instanceOf(CardRecord),
     setUneditable: React.PropTypes.func,
     setAvatar: React.PropTypes.func,
+    setAvatarWithValue: React.PropTypes.func,
     deleteCard: React.PropTypes.func,
     setAudioSet: React.PropTypes.func
   };
   state: {
-    recording: boolean
+    recording: boolean,
+    playing: boolean
   };
   constructor(props) {
     super(props);
-    this.state = {recording: false};
+    this.state = {recording: false, playing: false};
   }
   stop() {
     if (this.state.recording) {
@@ -154,29 +159,45 @@ class Editable extends React.Component {
       this.stop();
       this.setState({recording: false});
     }
-    AudioPlayer.play(getCardAudioPath(this.props.card));
+    if (!this.state.playing) {
+      this.setState({playing: true});
+      AudioPlayer.play(getCardAudioPath(this.props.card))
+        .then(() => this.setState({playing: false}));
+    }
   }
   deleteCard() {
-    Alert.alert( 'Delete Card',
+    Alert.alert('Delete Card',
       'Are you sure you want to proceed this operation is permanent?', 
       [{text: 'Cancel', undefined, style: 'cancel'},
       {text: 'Delete', onPress: () => {
         this.props.deleteCard();
+        const {first_card, card} = this.props;
+        if (this.props.deck.avatar === getCardImagePath(card)) {
+          if (first_card) {
+            this.props.setAvatarWithValue(getCardImagePath(first_card));
+          } else {
+            this.props.setAvatarWithValue(undefined);
+          }
+        }
         this.props.setUneditable();
       }}]);
   }
   render() {
+    let play_icon = 'play';
+    if (!this.props.card.audio_set) {
+      play_icon = 'mute';
+    }
     return (
       <View style={styles.editableCard}>
         <View style={styles.iconAndControls}>
           <Image source={{uri: `file://${getCardImagePath(this.props.card)}`}}
             style={styles.avatar}/>
           <Icon type={this.props.card.audio_set ? 'font-awesome' : 'octicon'}
-            name={this.props.card.audio_set ? 'volume-up' : 'mute'}
+            name={this.state.playing ? 'volume-up' : play_icon}
             size={24}
             raised={true}
             color={this.props.card.audio_set ? 'rgba(57, 63, 69, 1)' :
-                                          'rgba(230, 230, 230, 1)'}
+                                               'rgba(230, 230, 230, 1)'}
             underlayColor='rgba(230, 230, 230, 1)'
             iconStyle={{fontSize: 24}}
             containerStyle={{
@@ -242,8 +263,11 @@ const editableMapDispatchToProps = (dispatch, props) => ({
     dispatch(actions.updateDeckAvatar(props.card.deck_id,
                                       getCardImagePath(props.card)));
   },
+  setAvatarWithValue: (avatar: string) =>  {
+    dispatch(actions.updateDeckAvatar(props.card.deck_id, avatar));
+  },
   deleteCard: () => {
-    dispatch(actions.deleteCard(props.card.id));
+    dispatch(actions.deleteCard(props.card.id, props.card.deck_id));
   },
   setAudioSet: () => {
     dispatch(actions.setAudioSet(props.card.id));
@@ -258,6 +282,7 @@ const EditableCard = connect(
 class Cards extends React.Component {
   static propTypes = {
     cards: React.PropTypes.instanceOf(List),
+    deck: React.PropTypes.instanceOf(Deck)
   };
   state: {editing: number};
   constructor(props) {
@@ -270,32 +295,49 @@ class Cards extends React.Component {
   render () {
     return (
       <View style={styles.scrollContainer}>
-        <ScrollView>
-          <View style={styles.grid}>
-            {this.props.cards.map((c) => {
-              if (c.id === this.state.editing) {
-                return (
-                  <EditableCard key={c.id}
-                    card={c}
-                    setUneditable={() => this.setEditable(null)}/>
-                );
-              } else {
-                return (
-                  <StaticCard key={c.id}
-                    card={c}
-                    setEditable={() => this.setEditable(c.id)}/>
-                );
-              }
-            })}
-          </View>
-          <View style={styles.filler}></View>
-        </ScrollView>
+        {(() => {
+          if (this.props.cards.count() === 0) {
+            return (
+              <Text style={{fontSize: 24, textAlign: 'center', padding: 20}}>
+                You don't have any cards in this deck.
+                Press the camera button below to add cards.
+              </Text>
+            );
+          } else {
+            return (
+              <ScrollView>
+                <View style={styles.grid}>
+                  {this.props.cards.map((c, i) => {
+                    if (c.id === this.state.editing) {
+                      return (
+                        <EditableCard key={c.id}
+                          first_card={i === 0 ? this.props.cards.get(1) :
+                            this.props.cards.get(0)}
+                          deck={this.props.deck}
+                          card={c}
+                          setUneditable={() => this.setEditable(null)}/>
+                      );
+                    } else {
+                      return (
+                        <StaticCard key={c.id}
+                          card={c}
+                          setEditable={() => this.setEditable(c.id)}/>
+                      );
+                    }
+                  })}
+                </View>
+                <View style={styles.filler}></View>
+              </ScrollView>
+            );
+          }
+        })()}
       </View>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
+  deck: state.decks.find(d => d.id === state.selected_deck),
   cards: state.cards.filter(c => c.deck_id === state.selected_deck)
 });
 

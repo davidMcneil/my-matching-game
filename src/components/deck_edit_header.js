@@ -16,8 +16,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: 'rgba(230, 230, 230, 1)',
-    borderBottomWidth: 1
+    backgroundColor: 'rgba(0, 125, 0, 1)',
+    borderBottomWidth: 1,
+    paddingTop: 0,
+    paddingBottom: 0
   },
   staticTitle: {
     flexDirection: 'row',
@@ -26,20 +28,12 @@ const styles = StyleSheet.create({
   },
   staticName: {
     marginRight: 10,
-    color: 'rgba(57, 63, 69, 1)',
+    color: 'rgba(255, 255, 255, 1)',
     fontSize: 26
   },
   staticScore: {
-    color: 'rgba(57, 63, 69, 1)',
+    color: 'rgba(255, 255, 255, 1)',
     fontSize: 14
-  },
-  backButton: {
-    marginLeft: 5,
-    padding: 0
-  },
-  backIcon: {
-    fontSize: 18,
-    color: 'rgba(57, 63, 69, 1)'
   },
   editName: {
     flexDirection: 'row',
@@ -53,35 +47,28 @@ const styles = StyleSheet.create({
   },
   wideButton: {
     marginTop: 5,
-    padding: 10
+    padding: 10,
+    backgroundColor: 'rgba(0, 125, 0, 1)'
   },
   wideIcon: {
     marginRight: 3,
     fontSize: 18,
-    color: 'rgba(57, 63, 69, 1)'
+    color: 'rgba(255, 255, 255, 1)'
   },
   wideText: {
     fontSize: 18,
-    color: 'rgba(57, 63, 69, 1)'
+    color: 'rgba(255, 255, 255, 1)'
   }
 });
 
-const StaticHeader = (props: {deck: Deck, toDeckList: Function,
-                        openEditable: Function}) => {
+const StaticHeader = (props: {deck: Deck, openEditable: Function}) => {
   const image = props.deck.avatar ? `file://${props.deck.avatar}` :
     'https://thumb1.shutterstock.com/display_pic_with_logo/10654/116211973/stock-vector-illustration-of-zoo-and-animals-in-a-beautiful-nature-116211973.jpg';
   return (
     <View style={styles.staticHeader}>
-      <Button icon={{type: 'font-awesome', name: 'chevron-left',
-          style: styles.backIcon}}
-        backgroundColor='rgba(230, 230, 230, 1)'
-        buttonStyle={styles.backButton}
-        textStyle={{}}
-        title=''
-        onPress={() => props.toDeckList()} />
       <View style={styles.staticTitle}>
         <Image source={{uri: image}}
-               style={{width: 30, height: 30, borderRadius: 15}}/>
+               style={{width: 60, height: 50, marginRight: 10}}/>
         <Text style={styles.staticName}>
           {`${props.deck.name}`}
         </Text>
@@ -91,11 +78,11 @@ const StaticHeader = (props: {deck: Deck, toDeckList: Function,
       </View>
       <Icon name='pencil'
         type='font-awesome'
-        size={10}
+        size={16}
         raised={true}
         color='rgba(57, 63, 69, 1)'
         underlayColor='rgba(230, 230, 230, 1)'
-        iconStyle={{fontSize: 16}}
+        iconStyle={{fontSize: 20}}
         containerStyle={{backgroundColor: 'rgba(255, 255, 255, 1)'}}
         onPress={() => props.openEditable()} />
     </View>
@@ -155,7 +142,7 @@ class Editable extends React.Component {
   }
   render() {
     return (
-      <View>
+      <View style={{borderBottomWidth: 1, paddingBottom: 5}}>
         <View style={styles.editName}>
           <TextInput style={styles.nameInput}
             autoFocus={true}
@@ -165,7 +152,7 @@ class Editable extends React.Component {
             onChangeText={name => this.setState({name})}/>
           <Icon type='font-awesome'
             name='check'
-            size={14}
+            size={16}
             raised={true}
             color='rgba(255, 255, 255, 1)'
             underlayColor='rgba(0, 175, 0, 1)'
@@ -238,7 +225,6 @@ class Header extends React.Component {
     }
     return (
       <StaticHeader deck={this.props.deck}
-        toDeckList={this.props.toDeckList}
         openEditable={() => this.setState({editable: true})}/>
     );
   }

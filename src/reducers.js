@@ -1,9 +1,11 @@
 /* @flow */
 /* External Imports. */
 import {List} from 'immutable';
+import RNFS from 'react-native-fs';
 /* Local Imports. */
 import * as actions from './actions';
-import {Card, Deck} from './types';
+import {Card, Deck, getAudioPath, getCardAudioPath, getCardImagePath,
+        getImagePath} from './types';
 
 /********************************/
 // Local Declarations.
@@ -53,6 +55,10 @@ export const cards = (state: List<Card> = List(), action: Object) => {
   case actions.CREATE_CARD:
     return state.push(Card({...action}));
   case actions.DELETE_CARD:
+    RNFS.unlink(getAudioPath(action.id, action.deck_id))
+      .catch((err) => console.error(err.message));
+    RNFS.unlink(getImagePath(action.id, action.deck_id))
+      .catch((err) => console.error(err.message));
     return state.filter(c => c.id !== action.id);
   case actions.SET_AUDIO_SET:
     return state.map(c => {
@@ -61,6 +67,14 @@ export const cards = (state: List<Card> = List(), action: Object) => {
       }
       return c;
     });
+  case actions.DELETE_DECK:
+    for (const card of state) {
+      RNFS.unlink(getCardAudioPath(card))
+        .catch((err) => console.error(err.message));
+      RNFS.unlink(getCardImagePath(card))
+        .catch((err) => console.error(err.message));
+    }
+    return state.filter(c => c.deck_id !== action.id);
   default:
     return state;
   }

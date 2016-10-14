@@ -2,6 +2,7 @@
 /* External Imports. */
 import React from 'react';
 import {BackAndroid, Navigator} from 'react-native';
+import Orientation from 'react-native-orientation';
 import {Provider} from 'react-redux';
 /* Local Imports. */
 import {CameraScene} from './scenes/camera_scene';
@@ -62,11 +63,14 @@ const configureScene = (route) => {
 /********************************/
 // Exported Declarations.
 /********************************/
-export const MyMatchingGame = () => (
-  <Provider store={STORE}>
-    <Navigator ref={(nav) => navigator = nav}
-      initialRouteStack={routes.INITIAL_ROUTE_STACK}
-      renderScene={renderScene}
-      configureScene={configureScene}/>
-  </Provider>
-);
+export const MyMatchingGame = () => {
+  Orientation.lockToPortrait();
+  return (
+    <Provider store={STORE}>
+      <Navigator ref={(nav) => navigator = nav}
+        initialRouteStack={routes.INITIAL_ROUTE_STACK}
+        renderScene={renderScene}
+        configureScene={configureScene}/>
+    </Provider>
+  );
+};

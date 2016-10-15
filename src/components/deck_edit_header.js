@@ -62,12 +62,12 @@ const styles = StyleSheet.create({
 });
 
 const StaticHeader = (props: {deck: Deck, openEditable: Function}) => {
-  const image = props.deck.avatar ? `file://${props.deck.avatar}` :
-    'https://thumb1.shutterstock.com/display_pic_with_logo/10654/116211973/stock-vector-illustration-of-zoo-and-animals-in-a-beautiful-nature-116211973.jpg';
+  const source = props.deck.avatar ? {uri: `file://${props.deck.avatar}`} :
+    require('../flat_icon.png');
   return (
     <View style={styles.staticHeader}>
       <View style={styles.staticTitle}>
-        <Image source={{uri: image}}
+        <Image source={source}
                style={{width: 60, height: 50, marginRight: 10}}/>
         <Text style={styles.staticName}>
           {`${props.deck.name}`}

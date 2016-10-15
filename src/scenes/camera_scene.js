@@ -94,7 +94,7 @@ class CameraComp extends Component {
           aspect={Camera.constants.Aspect.fill}
           captureMode={Camera.constants.CaptureMode.still}
           captureTarget={Camera.constants.CaptureTarget.disk}
-          captureQuality={Camera.constants.CaptureQuality.high}
+          captureQuality={Camera.constants.CaptureQuality.low}
           type={Camera.constants.Type.back}
           orientation={Camera.constants.Orientation.auto}
           playSoundOnCapture={true}

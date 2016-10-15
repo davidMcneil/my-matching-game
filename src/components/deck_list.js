@@ -66,15 +66,15 @@ const styles = StyleSheet.create({
 
 const Deck = (props: {deck: DeckRecord, onPlay: Function,
                       onEdit: Function}) => {
-  const image = props.deck.avatar ? `file://${props.deck.avatar}` :
-    'https://thumb1.shutterstock.com/display_pic_with_logo/10654/116211973/stock-vector-illustration-of-zoo-and-animals-in-a-beautiful-nature-116211973.jpg';
+  const source = props.deck.avatar ? {uri: `file://${props.deck.avatar}`} :
+    require('../flat_icon.png');
   return (
     <TouchableHighlight style={styles.touchableDeck}
       underlayColor='rgba(230, 230, 230, 1)'
       onPress={() => props.onPlay()}>
       <View style={styles.deck}>
         <View style={styles.textAndAvatar}>
-          <Image source={{uri: image}}
+          <Image source={source}
                  style={styles.avatar}/>
           <View style={styles.text}>
             <Text style={styles.name}>

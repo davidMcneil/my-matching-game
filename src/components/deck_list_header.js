@@ -1,7 +1,7 @@
 /* @flow */
 /* External Imports. */
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import {Icon} from 'react-native-elements';
 /* Local Imports. */
 
@@ -31,6 +31,8 @@ const styles = StyleSheet.create({
 /********************************/
 export const DeckListHeader = () => (
   <View style={styles.header}>
+    <Image source={require('../flat_icon.png')}
+           style={{width: 50, height: 50, marginRight: 10}}/>
     <Text style={styles.title}>
       My Matching Game
     </Text>

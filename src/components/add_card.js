@@ -33,4 +33,4 @@ export const AddCard = (props: {toCamera: Function}) => (
 /********************************/
 // Exported Declarations.
 /********************************/
-export {AddCard as default}; 
+export {AddCard as default};

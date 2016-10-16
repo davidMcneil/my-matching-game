@@ -71,7 +71,7 @@ export const setAudioSet = (id: number) => ({
   id
 });
 
-export const updateSelectedDeck = (id: number) => ({
+export const updateSelectedDeck = (id: ?number) => ({
   type: UPDATE_SELECTED_DECK,
   id
 });

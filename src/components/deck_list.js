@@ -109,9 +109,11 @@ const Decks = (props: {toDeckEdit: Function, toDeckPlay: Function,
       if (props.decks.count() === 0) {
         return (
           <Text style={{fontSize: 24, textAlign: 'center', padding: 20}}>
-            You don't have any decks.
-            Press the plus button below to add a new deck
-            or press the help button above to view the app help.
+            {
+              "You don't have any decks. " +
+              "Press the plus button below to add a new deck " +
+              "or press the help button above to view the app help."
+            }
           </Text>
         );
       } else {
@@ -119,7 +121,7 @@ const Decks = (props: {toDeckEdit: Function, toDeckPlay: Function,
           <ScrollView>
             {props.decks.sort((d, o) => d.name.toLowerCase()
                 .localeCompare(o.name.toLowerCase()))
-              .map((d) => 
+              .map((d) =>
                 <Deck key={d.id}
                   deck={d}
                   onPlay={() => props.onPlay(d)}
@@ -155,4 +157,4 @@ export const DeckList = connect(
   mapDispatchToProps
 )(Decks);
 
-export {DeckList as default}; 
+export {DeckList as default};

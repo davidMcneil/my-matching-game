@@ -56,10 +56,10 @@ class DeckPlay extends Component {
   };
   state: {
     correct: number,
-    cards: List,
-    guessed_id: number,
+    cards: List<Card>,
+    guessed_id: ?number,
     playing: boolean,
-    widths: List
+    widths: List<number>
   };
   should_play_initial_audio: boolean;
   constructor(props) {
@@ -120,8 +120,10 @@ class DeckPlay extends Component {
           if (this.props.cards.count() < 3) {
             return (
               <Text style={{fontSize: 24, textAlign: 'center', padding: 20}}>
-                You need at least 3 cards in this deck to play.
-                Return to the deck edit screen and add more cards to play.
+                {
+                  "You need at least 3 cards in this deck to play. " +
+                  "Return to the deck edit screen and add more cards to play."
+                }
               </Text>
             );
           } else {
@@ -147,7 +149,7 @@ class DeckPlay extends Component {
                   }
                 })}
                 <PlayScore deck={this.props.deck}/>
-                <PlayAudio icon_name={this.state.playing ? 'volume-up' : 'play'} 
+                <PlayAudio icon_name={this.state.playing ? 'volume-up' : 'play'}
                   playAudio={() => this.playAudio()}/>
               </View>
             );
@@ -160,7 +162,7 @@ class DeckPlay extends Component {
 
 const mapStateToProps = (state) => ({
   deck: state.decks.find(d => d.id === state.selected_deck),
-  cards: state.cards.filter(c => c.deck_id === state.selected_deck && 
+  cards: state.cards.filter(c => c.deck_id === state.selected_deck &&
                                  c.audio_set)
 });
 

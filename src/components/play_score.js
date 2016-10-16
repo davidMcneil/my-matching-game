@@ -3,6 +3,7 @@
 import React from 'react';
 import {Dimensions, Text} from 'react-native';
 /* Local Imports. */
+import {Deck} from '../types';
 
 /********************************/
 // Local Declarations.
@@ -30,4 +31,4 @@ export const PlayScore = (props: {deck: Deck}) => (
 /********************************/
 // Exported Declarations.
 /********************************/
-export {PlayScore as default}; 
+export {PlayScore as default};

@@ -17,11 +17,11 @@ export const Card = Record({
   audio_set: false
 }, 'Card');
 
-export const getImagePath = (id, deck_id) => (
+export const getImagePath = (id: number, deck_id: number) => (
 	`${RNFS.DocumentDirectoryPath}/deck_${deck_id}-card_${id}.jpg`
 );
 
-export const getAudioPath = (id, deck_id) => (
+export const getAudioPath = (id: number, deck_id: number) => (
 	`${RNFS.DocumentDirectoryPath}/deck_${deck_id}-card_${id}.aac`
 );
 

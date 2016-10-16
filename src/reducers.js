@@ -69,8 +69,10 @@ export const cards = (state: List<Card> = List(), action: Object) => {
     });
   case actions.DELETE_DECK:
     for (const card of state) {
-      RNFS.unlink(getCardAudioPath(card))
-        .catch((err) => console.error(err.message));
+      if (card.audio_set) {
+        RNFS.unlink(getCardAudioPath(card))
+          .catch((err) => console.error(err.message));
+      }
       RNFS.unlink(getCardImagePath(card))
         .catch((err) => console.error(err.message));
     }
@@ -90,7 +92,7 @@ export const next_id = (state: number = 0, action: Object) => {
   }
 };
 
-export const selected_deck = (state: number = null, action: Object) => {
+export const selected_deck = (state: ?number = null, action: Object) => {
   switch(action.type) {
   case actions.UPDATE_SELECTED_DECK:
     return action.id;

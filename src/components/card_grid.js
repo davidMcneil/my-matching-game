@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   closeButton: {
-    height: 100,
+    height: 80,
     width: 40,
     paddingLeft: 10,
     paddingRight: 0,
@@ -68,8 +68,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    width: 80,
-    height: 100
+    width: 60,
+    height: 80
   },
   filler: {
     height: 120
@@ -167,7 +167,7 @@ class Editable extends React.Component {
   }
   deleteCard() {
     Alert.alert('Delete Card',
-      'Are you sure you want to proceed this operation is permanent?', 
+      'Are you sure you want to proceed this operation is permanent?',
       [{text: 'Cancel', undefined, style: 'cancel'},
       {text: 'Delete', onPress: () => {
         this.props.deleteCard();
@@ -190,8 +190,13 @@ class Editable extends React.Component {
     return (
       <View style={styles.editableCard}>
         <View style={styles.iconAndControls}>
-          <Image source={{uri: `file://${getCardImagePath(this.props.card)}`}}
-            style={styles.avatar}/>
+          <TouchableHighlight underlayColor='rgba(230, 230, 230, 1)'
+            onPress={() => this.props.setUneditable()}>
+            <View>
+              <Image style={styles.avatar}
+              source={{uri: `file://${getCardImagePath(this.props.card)}`}}/>
+            </View>
+          </TouchableHighlight>
           <Icon type={this.props.card.audio_set ? 'font-awesome' : 'octicon'}
             name={this.state.playing ? 'volume-up' : play_icon}
             size={24}
@@ -287,7 +292,7 @@ class Cards extends React.Component {
     cards: React.PropTypes.instanceOf(List),
     deck: React.PropTypes.instanceOf(Deck)
   };
-  state: {editing: number};
+  state: {editing: ?number};
   constructor(props) {
     super(props);
     this.state = {editing: null};
@@ -302,8 +307,10 @@ class Cards extends React.Component {
           if (this.props.cards.count() === 0) {
             return (
               <Text style={{fontSize: 24, textAlign: 'center', padding: 20}}>
-                You don't have any cards in this deck.
-                Press the camera button below to add cards.
+                {
+                  "You don't have any cards in this deck. " +
+                  "Press the camera button below to add cards."
+                }
               </Text>
             );
           } else {
@@ -355,4 +362,4 @@ export const CardGrid = connect(
   mapDispatchToProps
 )(Cards);
 
-export {CardGrid as default}; 
+export {CardGrid as default};

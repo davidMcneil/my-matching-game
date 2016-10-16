@@ -43,9 +43,11 @@ class CameraComp extends Component {
     updateDeckAvatar: React.PropTypes.func
   };
   state: {taking: boolean};
+  scrollView: any;
+  camera: any;
   constructor(props) {
     super(props);
-    this.state = {taking: null};
+    this.state = {taking: false};
   }
   takePicture() {
     if (this.props.deck && !this.state.taking){
@@ -64,7 +66,7 @@ class CameraComp extends Component {
               }
             }).catch(err => {
               this.setState({taking: false});
-              this.props.delete(id, this.props.deck.id);          
+              this.props.delete(id, this.props.deck.id);
               console.error(err);
             });
         }).catch(err => {
@@ -77,7 +79,7 @@ class CameraComp extends Component {
     return (
       <View style={styles.container}>
         <ScrollView horizontal={true}
-          ref={ref => this.scrollView = ref}  
+          ref={ref => this.scrollView = ref}
           style={{height: 40}}
           onContentSizeChange={(contentWidth) => {
             SCROLL_TO_END = contentWidth;
@@ -103,7 +105,7 @@ class CameraComp extends Component {
             type='font-awesome'
             size={26}
             raised={true}
-            color={this.state.taking ? 'rgba(230, 230, 230, 1)' : 
+            color={this.state.taking ? 'rgba(230, 230, 230, 1)' :
                 'rgba(57, 63, 69, 1)'}
             underlayColor='rgba(230, 230, 230, 1)'
             iconStyle={{fontSize: 36}}

@@ -249,7 +249,10 @@ class Editable extends React.Component {
           buttonStyle={styles.closeButton}
           textStyle={styles.wideText}
           title=''
-          onPress={() => this.props.setUneditable()}/>
+          onPress={() => {
+            this.stop();
+            this.props.setUneditable();
+          }}/>
       </View>
     );
   }

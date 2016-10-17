@@ -18,7 +18,7 @@ const styles = {
   }
 };
 
-export const AddCard = (props: {toCamera: Function}) => (
+export const AddCardFromCamera = (props: {toCamera: Function}) => (
   <Icon name='camera'
     type='font-awesome'
     size={26}
@@ -33,4 +33,4 @@ export const AddCard = (props: {toCamera: Function}) => (
 /********************************/
 // Exported Declarations.
 /********************************/
-export {AddCard as default};
+export {AddCardFromCamera as default};

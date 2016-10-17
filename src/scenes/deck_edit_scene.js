@@ -3,7 +3,8 @@
 import React from 'react';
 import {View} from 'react-native';
 /* Local Imports. */
-import AddCard from '../components/add_card';
+import AddCardFromCamera from '../components/add_card_from_camera';
+import AddCardFromFiles from '../components/add_card_from_files';
 import CardGrid from '../components/card_grid';
 import DeckEditHeader from '../components/deck_edit_header';
 
@@ -19,7 +20,8 @@ export const DeckEditScene = (props: {toDeckList: Function,
   <View>
     <DeckEditHeader toDeckList={props.toDeckList}/>
     <CardGrid/>
-    <AddCard toCamera={props.toCamera}/>
+    <AddCardFromFiles/>
+    <AddCardFromCamera toCamera={props.toCamera}/>
   </View>
 );
 

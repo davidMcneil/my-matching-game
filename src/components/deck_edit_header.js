@@ -119,7 +119,7 @@ class Editable extends React.Component {
   onResetPress() {
     if (this.props.deck) {
       Alert.alert( 'Reset Score',
-        'Are you sure you want to proceed this operation is permanent?', 
+        'Are you sure you want to proceed this operation is permanent?',
         [{text: 'Cancel', undefined, style: 'cancel'},
         {text: 'Reset', onPress: () => {
           this.props.reset();
@@ -130,7 +130,7 @@ class Editable extends React.Component {
   onDeletePress() {
     if (this.props.deck) {
       Alert.alert( 'Delete Deck',
-        'Are you sure you want to proceed this operation is permanent?', 
+        'Are you sure you want to proceed this operation is permanent?',
         [{text: 'Cancel', undefined, style: 'cancel'},
         {text: 'Delete', onPress: () => {
           this.props.toDeckList();
@@ -149,7 +149,8 @@ class Editable extends React.Component {
             value={this.state.name}
             placeholder='Deck name...'
             autoCapitalize='words'
-            onChangeText={name => this.setState({name})}/>
+            onChangeText={name => this.setState({name})}
+            onSubmitEditing={() => this.onSavePress()} />
           <Icon type='font-awesome'
             name='check'
             size={16}
@@ -245,4 +246,4 @@ export const DeckEditHeader = connect(
   mapDispatchToProps
 )(Header);
 
-export {DeckEditHeader as default}; 
+export {DeckEditHeader as default};

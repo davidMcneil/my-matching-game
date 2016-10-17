@@ -33,4 +33,4 @@ export const PlayAudio = (props: {icon_name: string, playAudio: Function}) => (
 /********************************/
 // Exported Declarations.
 /********************************/
-export {PlayAudio as default}; 
+export {PlayAudio as default};

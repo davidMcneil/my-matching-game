@@ -304,7 +304,7 @@ class Cards extends React.Component {
     return (
       <View style={styles.scrollContainer}>
         {(() => {
-          if (this.props.cards.count() === 0) {
+          if (this.props.cards.count() === 0 && this.props.deck) {
             return (
               <Text style={{fontSize: 24, textAlign: 'center', padding: 20}}>
                 {
@@ -313,7 +313,7 @@ class Cards extends React.Component {
                 }
               </Text>
             );
-          } else {
+          } else if (this.props.cards.count() > 0) {
             return (
               <ScrollView>
                 <View style={styles.grid}>

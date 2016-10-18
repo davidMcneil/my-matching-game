@@ -121,7 +121,7 @@ class DeckPlay extends Component {
             return (
               <Text style={{fontSize: 24, textAlign: 'center', padding: 20}}>
                 {
-                  "You need at least 3 cards in this deck to play. " +
+                  "You need at least 3 cards with audio in this deck to play. "+
                   "Return to the deck edit screen and add more cards to play."
                 }
               </Text>

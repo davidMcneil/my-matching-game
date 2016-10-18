@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
 
 const StaticHeader = (props: {deck: Deck, openEditable: Function}) => {
   const source = props.deck.avatar ? {uri: `file://${props.deck.avatar}`} :
-    require('../flat_icon.png');
+    require('../resources/flat_icon.png');
   return (
     <View style={styles.staticHeader}>
       <View style={styles.staticTitle}>

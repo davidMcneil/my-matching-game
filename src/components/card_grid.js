@@ -309,7 +309,9 @@ class Cards extends React.Component {
               <Text style={{fontSize: 24, textAlign: 'center', padding: 20}}>
                 {
                   "You don't have any cards in this deck. " +
-                  "Press the camera button below to add cards."
+                  "Press the camera button below to add cards by taking " +
+                  "pictures, or press the image button below to add cards " +
+                  "from existing images."
                 }
               </Text>
             );

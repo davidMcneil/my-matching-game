@@ -31,12 +31,12 @@ const styles = StyleSheet.create({
 /********************************/
 export const DeckListHeader = () => (
   <View style={styles.header}>
-    <Image source={require('../flat_icon.png')}
+    <Image source={require('../resources/flat_icon.png')}
            style={{width: 50, height: 50, marginRight: 10}}/>
     <Text style={styles.title}>
       My Matching Game
     </Text>
-    <Icon name='question'
+    {/* <Icon name='question'
       type='font-awesome'
       size={16}
       raised={true}
@@ -44,8 +44,8 @@ export const DeckListHeader = () => (
       underlayColor='rgba(230, 230, 230, 1)'
       iconStyle={{fontSize: 20}}
       containerStyle={{backgroundColor: 'rgba(255, 255, 255, 1)'}}
-      onPress={() => console.log('help')} />
+      onPress={() => console.log('help')} /> */}
   </View>
 );
 
-export {DeckListHeader as default}; 
+export {DeckListHeader as default};

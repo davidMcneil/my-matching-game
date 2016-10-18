@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
 const Deck = (props: {deck: DeckRecord, onPlay: Function,
                       onEdit: Function}) => {
   const source = props.deck.avatar ? {uri: `file://${props.deck.avatar}`} :
-    require('../flat_icon.png');
+    require('../resources/flat_icon.png');
   return (
     <TouchableHighlight style={styles.touchableDeck}
       underlayColor='rgba(230, 230, 230, 1)'
@@ -111,8 +111,7 @@ const Decks = (props: {toDeckEdit: Function, toDeckPlay: Function,
           <Text style={{fontSize: 24, textAlign: 'center', padding: 20}}>
             {
               "You don't have any decks. " +
-              "Press the plus button below to add a new deck " +
-              "or press the help button above to view the app help."
+              "Press the plus button below to add a new deck."
             }
           </Text>
         );

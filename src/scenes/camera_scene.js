@@ -56,7 +56,7 @@ class CameraComp extends Component {
         .then((data) => {
           const id = this.props.next_id;
           this.props.create(id, this.props.deck.id);
-          RNFS.moveFile(data.path.replace('file://', ''),
+          RNFS.copyFile(data.path.replace('file://', ''),
                         getImagePath(id, this.props.deck.id))
             .then(() => {
               this.setState({taking: false});
